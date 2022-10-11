@@ -56,4 +56,3 @@ class Dinosaur:
 
     def duck(self):
         pass
-    
