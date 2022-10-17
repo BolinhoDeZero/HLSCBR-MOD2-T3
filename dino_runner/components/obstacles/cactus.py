@@ -1,14 +1,14 @@
 import random
 
-from dino_runner.utils.constants import LARGE_CACTUS, SMALL_CACTUS
+from dino_runner.utils.constants import MOBS, MUSHROOM #MUSHROOM adicionado 
 from dino_runner.components.obstacles.obstacle import Obstacle
 
 
 class Cactus(Obstacle):
 
     CACTUS = [
-        (LARGE_CACTUS, 300),
-        (SMALL_CACTUS, 325),
+        (MOBS, 300),
+        (MUSHROOM, 325),
     ]
 
     def __init__(self):

@@ -1,24 +1,26 @@
 import pygame
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON_MIKU, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE, ICON_MIKU_OPEN, MICROFONE_TYPE
 from dino_runner.components.dinosaur import Dinosaur
 from dino_runner.components.obstacles.obstacle_manager import ObstacleManager
 from dino_runner.utils.text_utils import draw_message_component
 from dino_runner.components.powerups.power_up_manager import PowerUpManager
 
+GAME_SPEED = 20
+MIKU_SONG = "dino_runner/assets/Miku/miku_song.wav"
 
 class Game:
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
-        pygame.display.set_icon(ICON)
+        pygame.display.set_icon(ICON_MIKU)
         self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
         self.clock = pygame.time.Clock()
         self.playing = False
         self.running = False
         self.score = 0
         self.death_count = 0
-        self.game_speed = 20
+        self.game_speed = GAME_SPEED
         self.x_pos_bg = 0
         self.y_pos_bg = 380
         self.player = Dinosaur()
@@ -38,13 +40,18 @@ class Game:
         self.playing = True
         self.obstacle_manager.reset_obstacles()
         self.power_up_manager.reset_power_ups()
-        self.game_speed = 20
+        self.game_speed = GAME_SPEED
         self.score = 0
         while self.playing:
             self.events()
             self.update()
             self.draw()
     
+    def song_miku(self):
+        pygame.mixer.music.load(MIKU_SONG)
+        pygame.mixer.music.set_volume == 20
+        pygame.mixer.music.play(2)
+
     def events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -61,11 +68,11 @@ class Game:
     def update_score(self):
         self.score += 1
         if self.score % 100 == 0:
-            self.game_speed += 5
+            self.game_speed += 2
     
     def draw(self):
         self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255)) # "#FFFFFF"
+        self.screen.fill((173, 216, 230)) # "#FFFFFF"
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
@@ -114,6 +121,7 @@ class Game:
                 self.running = False
             elif event.type == pygame.KEYDOWN:
                 self.run()
+                self.song_miku()
     
     def show_menu(self):
         self.screen.fill((255, 255, 255))
@@ -121,9 +129,13 @@ class Game:
         half_screen_width = SCREEN_WIDTH // 2
         
         if self.death_count == 0:
-           draw_message_component("Press any key to start", self.screen)
+           draw_message_component("-HI! Wellcome! I'm Miku and I'm so happy becase you here!", self.screen,(10,186,181), pos_y_center = half_screen_height - 80, pos_x_center = half_screen_width - 210)
+           draw_message_component("Today i'm going for a walk around! Do you go with me?", self.screen,(10,186,181), pos_y_center = half_screen_height - 50, pos_x_center = half_screen_width - 210)
+           draw_message_component("Press any key to start", self.screen, pos_y_center = half_screen_height + 100, pos_x_center = half_screen_width - 210)
+           self.screen.blit(ICON_MIKU_OPEN, (half_screen_width + 50, half_screen_height - 200))
         else:
-            draw_message_component("Press any key to restart", self.screen, pos_y_center=half_screen_height + 140)
+            draw_message_component("-Oh...You died... Miku is sorry for you, but... you can:", self.screen,(10,186,181), pos_y_center=half_screen_height + 140)
+            draw_message_component("Press any key to restart", self.screen, pos_y_center=half_screen_height + 180)
             draw_message_component(
                 f"Your Score: {self.score}",
                 self.screen,
@@ -131,10 +143,10 @@ class Game:
             )            
             draw_message_component(
                 f"Death count: {self.death_count}",
-                self.screen,
+                self.screen,(163,55,27),
                 pos_y_center=half_screen_height - 100
             )
-            self.screen.blit(ICON, (half_screen_width - 40, half_screen_height - 30))
+            self.screen.blit(ICON_MIKU, (half_screen_width - 40, half_screen_height - 30))
 
         pygame.display.flip()
 

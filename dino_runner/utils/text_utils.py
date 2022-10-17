@@ -19,4 +19,6 @@ def draw_message_component(
     text = font.render(message, True, font_color)
     text_rect = text.get_rect()
     text_rect.center = (pos_x_center, pos_y_center)
-    screen.blit(text, text_rect) 
+    screen.blit(text, text_rect)
+
+ 
